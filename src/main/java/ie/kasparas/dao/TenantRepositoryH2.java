@@ -22,7 +22,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Repository
 @Slf4j
-public class TenantRepositorySQL implements TenantRepository {
+public class TenantRepositoryH2 implements TenantRepository {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -32,11 +32,6 @@ public class TenantRepositorySQL implements TenantRepository {
         SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("email", email)
                 .addValue("firstName", firstName).addValue("lastName", lastName).addValue("phone", phone).addValue("eircode", eircode);
         return namedParameterJdbcTemplate.update(SQL, namedParameters);
-    }
-
-    @Override
-    public int moveTenant(String email) {
-        return 0;
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Repository
 @Slf4j
-public class PropertyRepositorySQL implements PropertyRepository {
+public class PropertyRepositoryH2 implements PropertyRepository {
     @Autowired
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 

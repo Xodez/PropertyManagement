@@ -15,7 +15,7 @@ public interface TenantService {
     int deleteTenant(String email);
 
     // Search for tenants by Eircode
-    List<Tenant> searchTenantsByEircode(String email);
+    List<Tenant> searchTenantsByEircode(String eircode);
 
     List<Tenant> tenants();
 

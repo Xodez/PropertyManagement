@@ -19,7 +19,7 @@ public class Main {
         PropertyService propertyService = context.getBean(PropertyServiceImplementation.class);
         TenantService tenantService = context.getBean(TenantServiceImplementation.class);
         Menu menu = new Menu();
-        int option = 0;
+        int option;
         List<Property> properties;
         String eircode;
         String email;
@@ -70,7 +70,7 @@ public class Main {
                         System.out.println(value.getEircode());
                     }
                     tenant = menu.addNewTenantDetails();
-                    int confirmation = 0;
+                    int confirmation;
                     if (propertyService.exists(tenant.getEircode())) {
                         if (propertyService.hasCapacity(tenant.getEircode())) {
                             confirmation = tenantService.addNewTenant(tenant.getEircode(), tenant.getPhone(), tenant.getFirstName(), tenant.getLastName(), tenant.getEmail());
@@ -101,10 +101,16 @@ public class Main {
                         System.out.println(value.getEircode());
                     }
                     eircode = menu.askForEircode();
-                    propertyService.updateOccupants(tenant.getEircode(), "remove");
-                    propertyService.updateOccupants(eircode, "add");
-                    tenantService.updateTenantProperty(email, eircode);
-                    System.out.println("Tenant " + email + " has been moved to the property " + eircode);
+                    property = propertyService.searchPropertyByEircode(eircode);
+                    if (property.getOccupants() != property.getCapacity()) {
+                        propertyService.updateOccupants(tenant.getEircode(), "remove");
+                        propertyService.updateOccupants(eircode, "add");
+                        tenantService.updateTenantProperty(email, eircode);
+                        System.out.println("Tenant " + email + " has been moved to the property " + eircode);
+                    }
+                    else{
+                        System.out.println("This property is full");
+                    }
                 }
                 case 7 -> {
                     properties = propertyService.properties();
