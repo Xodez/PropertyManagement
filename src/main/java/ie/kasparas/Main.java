@@ -29,7 +29,6 @@ public class Main {
         float averageTenants;
         float rent;
         int housesWithNoSpace;
-        int counter;
         while (true) {
             option = menu.menuStart();
             switch (option) {
@@ -132,20 +131,10 @@ public class Main {
                     System.out.println("Tenant " + email + " has been removed");
                 }
                 case 9 -> {
-                    properties = propertyService.properties();
-                    averageTenants = 0;
-                    counter = 0;
-                    rent = 0;
-                    housesWithNoSpace = 0;
-                    for (Property value : properties) {
-                        averageTenants += value.getOccupants();
-                        counter += 1;
-                        rent += (value.getCost() * value.getOccupants());
-                        if (value.getOccupants() == value.getCapacity()) {
-                            housesWithNoSpace += 1;
-                        }
-                    }
-                    averageTenants = averageTenants / counter;
+                    averageTenants = propertyService.averageTenants();
+                    rent = propertyService.rent();
+                    housesWithNoSpace = propertyService.housesWithNoSpace();
+
                     System.out.println("Average tenants per property: " + averageTenants);
                     System.out.printf("Total income from properties: $%.2f\n", rent);
                     System.out.println("Houses with no space: " + housesWithNoSpace);

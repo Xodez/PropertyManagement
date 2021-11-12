@@ -114,4 +114,37 @@ public class PropertyRepositorySQL implements PropertyRepository {
         namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
+    @Override
+    public float averageTenants() {
+        try {
+            return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject("SELECT AVG(CAST(occupants as float)) FROM property", float.class);
+        }
+        catch (Exception ex) {
+            log.error("Error");
+            return 0;
+        }
+    }
+
+    @Override
+    public float rent() {
+        try {
+            return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject("SELECT SUM(occupants * cost) FROM property", float.class);
+        }
+        catch (Exception ex) {
+            log.error("Error");
+            return 0;
+        }
+    }
+
+    @Override
+    public int houseWithNoSpace() {
+        try {
+            return namedParameterJdbcTemplate.getJdbcTemplate().queryForObject("SELECT COUNT(eircode) FROM property WHERE occupants = capacity", int.class);
+        }
+        catch (Exception ex) {
+            log.error("Error");
+            return 0;
+        }
+    }
+
 }

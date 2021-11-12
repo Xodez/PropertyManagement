@@ -24,4 +24,10 @@ public interface PropertyRepository {
     void updateOccupants(String eircode, String addOrRemove);
 
     void deleteProperty(String eircode);
+
+    float averageTenants();
+
+    float rent();
+
+    int houseWithNoSpace();
 }

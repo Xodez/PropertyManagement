@@ -55,4 +55,19 @@ public class PropertyServiceImplementation implements PropertyService {
         propertyRepository.deleteProperty(eircode);
     }
 
+    @Override
+    public float averageTenants() {
+        return propertyRepository.averageTenants();
+    }
+
+    @Override
+    public float rent() {
+        return propertyRepository.rent();
+    }
+
+    @Override
+    public int housesWithNoSpace() {
+        return propertyRepository.houseWithNoSpace();
+    }
+
 }
