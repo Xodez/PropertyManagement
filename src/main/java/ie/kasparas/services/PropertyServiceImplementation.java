@@ -35,4 +35,24 @@ public class PropertyServiceImplementation implements PropertyService {
         return 0;
     }
 
+    @Override
+    public boolean exists(String eircode) {
+        return propertyRepository.exists(eircode);
+    }
+
+    @Override
+    public boolean hasCapacity(String eircode) {
+        return propertyRepository.hasCapacity(eircode);
+    }
+
+    @Override
+    public void updateOccupants(String eircode, String addOrRemove) {
+        propertyRepository.updateOccupants(eircode, addOrRemove);
+    }
+
+    @Override
+    public void deleteProperty(String eircode) {
+        propertyRepository.deleteProperty(eircode);
+    }
+
 }

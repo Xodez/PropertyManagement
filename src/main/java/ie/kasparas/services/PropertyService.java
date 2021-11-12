@@ -18,4 +18,11 @@ public interface PropertyService {
     // Add a new property
     int addNewProperty(String eircode, int capacity, int occupants, float cost);
 
+    boolean exists(String eircode);
+
+    boolean hasCapacity(String eircode);
+
+    void updateOccupants(String eircode, String addOrRemove);
+
+    void deleteProperty(String eircode);
 }

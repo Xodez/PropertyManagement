@@ -22,8 +22,14 @@ public class Main {
         int option = 0;
         List<Property> properties;
         String eircode;
+        String email;
         Property property;
         List<Tenant> tenants;
+        Tenant tenant;
+        float averageTenants;
+        float rent;
+        int housesWithNoSpace;
+        int counter;
         while (true) {
             option = menu.menuStart();
             switch (option) {
@@ -60,7 +66,89 @@ public class Main {
                     }
                 }
                 case 5 -> {
-
+                    properties = propertyService.properties();
+                    for (Property value : properties) {
+                        System.out.println(value.getEircode());
+                    }
+                    tenant = menu.addNewTenantDetails();
+                    int confirmation = 0;
+                    if (propertyService.exists(tenant.getEircode())) {
+                        if (propertyService.hasCapacity(tenant.getEircode())) {
+                            confirmation = tenantService.addNewTenant(tenant.getEircode(), tenant.getPhone(), tenant.getFirstName(), tenant.getLastName(), tenant.getEmail());
+                        } else {
+                            System.out.println("This property has no more capacity");
+                            break;
+                        }
+                    } else {
+                        System.out.println("Eircode entered does not exist in database");
+                        break;
+                    }
+                    if (confirmation != 0) {
+                        System.out.println("Added successfully");
+                        propertyService.updateOccupants(tenant.getEircode(), "add");
+                    } else {
+                        System.out.println("Tenant with the same email already exists in the database");
+                    }
+                }
+                case 6 -> {
+                    tenants = tenantService.tenants();
+                    for (Tenant value : tenants) {
+                        System.out.println(value.getEmail());
+                    }
+                    email = menu.askForEmail();
+                    tenant = tenantService.searchTenantsByEmail(email);
+                    properties = propertyService.properties();
+                    for (Property value : properties) {
+                        System.out.println(value.getEircode());
+                    }
+                    eircode = menu.askForEircode();
+                    propertyService.updateOccupants(tenant.getEircode(), "remove");
+                    propertyService.updateOccupants(eircode, "add");
+                    tenantService.updateTenantProperty(email, eircode);
+                    System.out.println("Tenant " + email + " has been moved to the property " + eircode);
+                }
+                case 7 -> {
+                    properties = propertyService.properties();
+                    for (Property value : properties) {
+                        System.out.println(value.getEircode());
+                    }
+                    eircode = menu.askForEircode();
+                    tenants = tenantService.searchTenantsByEircode(eircode);
+                    for (Tenant value : tenants) {
+                        tenantService.deleteTenant(value.getEmail());
+                    }
+                    propertyService.deleteProperty(eircode);
+                    System.out.println("Property " + eircode + " along with all of its tenants has been deleted successfully");
+                }
+                case 8 -> {
+                    tenants = tenantService.tenants();
+                    for (Tenant value : tenants) {
+                        System.out.println(value.getEmail());
+                    }
+                    email = menu.askForEmail();
+                    eircode = tenantService.searchTenantsByEmail(email).getEircode();
+                    tenantService.deleteTenant(email);
+                    propertyService.updateOccupants(eircode, "remove");
+                    System.out.println("Tenant " + email + " has been removed");
+                }
+                case 9 -> {
+                    properties = propertyService.properties();
+                    averageTenants = 0;
+                    counter = 0;
+                    rent = 0;
+                    housesWithNoSpace = 0;
+                    for (Property value : properties) {
+                        averageTenants += value.getOccupants();
+                        counter += 1;
+                        rent += (value.getCost() * value.getOccupants());
+                        if (value.getOccupants() == value.getCapacity()) {
+                            housesWithNoSpace += 1;
+                        }
+                    }
+                    averageTenants = averageTenants / counter;
+                    System.out.println("Average tenants per property: " + averageTenants);
+                    System.out.printf("Total income from properties: $%.2f\n", rent);
+                    System.out.println("Houses with no space: " + housesWithNoSpace);
                 }
                 case 10 -> System.exit(0);
             }

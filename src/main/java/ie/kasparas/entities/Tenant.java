@@ -12,5 +12,5 @@ public class Tenant {
     private String email;
     private String firstName;
     private String lastName;
-    private int phone;
+    private String phone;
 }

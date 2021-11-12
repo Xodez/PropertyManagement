@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TenantRepository {
     // Add a new tenant
-    int addNewTenant(String eircode, int phone, String firstName, String lastName, String email);
+    int addNewTenant(String eircode, String phone, String firstName, String lastName, String email);
 
     // Move a tenant from one property to another
     int moveTenant(String email);
@@ -18,5 +18,11 @@ public interface TenantRepository {
     List<Tenant> searchTenantsByEircode(String eircode);
 
     // Check if tenant exists
-    boolean exists(String eircode);
+    boolean exists(String email);
+
+    List<Tenant> tenants();
+
+    Tenant searchTenantsByEmail(String email);
+
+    void updateTenantProperty(String email, String eircode);
 }

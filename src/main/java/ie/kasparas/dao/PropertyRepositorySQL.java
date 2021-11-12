@@ -13,6 +13,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +31,7 @@ public class PropertyRepositorySQL implements PropertyRepository {
             SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("key", eircode);
             return namedParameterJdbcTemplate.queryForObject(SQL, namedParameters, new PropertyRowMapper());
         } catch (Exception ex) {
+            log.error("Error");
             return null;
         }
     }
@@ -39,6 +41,7 @@ public class PropertyRepositorySQL implements PropertyRepository {
         try {
             return namedParameterJdbcTemplate.query("SELECT * FROM property", new PropertyRowMapper());
         } catch (Exception ex) {
+            log.error("Error");
             return null;
         }
     }
@@ -48,6 +51,7 @@ public class PropertyRepositorySQL implements PropertyRepository {
         try {
             return namedParameterJdbcTemplate.query("SELECT * FROM property WHERE capacity > occupants", new PropertyRowMapper());
         } catch (Exception ex) {
+            log.error("Error");
             return null;
         }
     }
@@ -68,8 +72,46 @@ public class PropertyRepositorySQL implements PropertyRepository {
             List<Property> result = namedParameterJdbcTemplate.query(SQL, namedParameters, new PropertyRowMapper());
             return result.size() != 0;
         } catch (Exception ex) {
+            log.error("Error");
             return true;
         }
+    }
+
+    @Override
+    public boolean hasCapacity(String eircode) {
+        try {
+            String SQL = "SELECT * FROM property WHERE eircode = :key AND capacity > occupants";
+            SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("key", eircode);
+            List<Property> result = namedParameterJdbcTemplate.query(SQL, namedParameters, new PropertyRowMapper());
+            return result.size() != 0;
+        } catch (Exception ex) {
+            log.error("Error");
+            return false;
+        }
+    }
+
+    @Override
+    public void updateOccupants(String eircode, String addOrRemove) {
+        try {
+            String SQL;
+            if (Objects.equals(addOrRemove, "add")) {
+                SQL = "UPDATE property SET occupants = occupants + 1 WHERE eircode = :key";
+            }
+            else{
+                SQL = "UPDATE property SET occupants = occupants - 1 WHERE eircode = :key";
+            }
+            SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("key", eircode);
+            namedParameterJdbcTemplate.update(SQL, namedParameters);
+        } catch (Exception ex) {
+            log.error("Error");
+        }
+    }
+
+    @Override
+    public void deleteProperty(String eircode) {
+        String SQL = "DELETE FROM property WHERE eircode = :eircode";
+        SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("eircode", eircode);
+        namedParameterJdbcTemplate.update(SQL, namedParameters);
     }
 
 }

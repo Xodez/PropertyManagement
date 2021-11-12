@@ -19,4 +19,9 @@ public interface PropertyRepository {
     // Check if property exists
     boolean exists(String eircode);
 
+    boolean hasCapacity(String eircode);
+
+    void updateOccupants(String eircode, String addOrRemove);
+
+    void deleteProperty(String eircode);
 }

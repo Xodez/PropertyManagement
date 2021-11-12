@@ -12,7 +12,7 @@ public class TenantRowMapper implements RowMapper<Tenant> {
         tenant.setFirstName(rs.getString("firstName"));
         tenant.setEircode(rs.getString("eircode"));
         tenant.setLastName(rs.getString("lastName"));
-        tenant.setPhone(rs.getInt("phone"));
+        tenant.setPhone(rs.getString("phone"));
         return tenant;
     }
 }
